@@ -2,18 +2,24 @@ package com.pragma.powerup.domain.usecase;
 
 import com.pragma.powerup.domain.api.IRestaurantServicePort;
 
+import com.pragma.powerup.domain.exception.UserNotOwnerException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNameException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNitException;
 import com.pragma.powerup.domain.exception.invalid.InvalidPhoneException;
 import com.pragma.powerup.domain.model.RestaurantModel;
+import com.pragma.powerup.domain.model.RoleModel;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.domain.spi.IUserPersistencePort;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.regex.Pattern;
-
+@AllArgsConstructor
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
+    private final IUserPersistencePort userPersistencePort;
+
     private static final String NOT_EXCLUSIVELY_NUMBER_PATTERN =
             "(?!^\\d+$)^.+$";
     private static final Pattern notExclusivelyNumericPattern = Pattern.compile(NOT_EXCLUSIVELY_NUMBER_PATTERN);
@@ -25,10 +31,6 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             "^\\+\\d{1,12}$";
     private static final Pattern phonePattern = Pattern.compile(PHONE_PATTERN);
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort) {
-        this.restaurantPersistencePort = restaurantPersistencePort;
-    }
-
     @Override
     public RestaurantModel saveRestaurant(RestaurantModel restaurantModel) {
         if(!phonePattern.matcher(restaurantModel.getPhone()).matches()){
@@ -37,6 +39,16 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new InvalidNitException();
         } else if (!notExclusivelyNumericPattern.matcher(restaurantModel.getName()).matches()){
             throw new InvalidNameException();
+        }
+        boolean isUserOwner = false;
+        for(RoleModel userRole : userPersistencePort.getUserById(restaurantModel.getOwnerUserId()).getRoles()){
+            if(userRole.getName().equals(RoleModel.RoleEnum.OWNER.getName())){
+                isUserOwner = true;
+                break;
+            }
+        }
+        if(!isUserOwner) {
+            throw new UserNotOwnerException();
         }
         return restaurantPersistencePort.saveRestaurant(restaurantModel);
     }

@@ -1,6 +1,7 @@
 package com.pragma.powerup.infrastructure.exceptionhandler;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.pragma.powerup.domain.exception.UserNotOwnerException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNameException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNitException;
 import com.pragma.powerup.domain.exception.invalid.InvalidPhoneException;
@@ -45,5 +46,11 @@ public class ControllerAdvisor {
             InvalidFormatException ignoredException) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_FORMAT.getMessage()));
+    }
+    @ExceptionHandler(UserNotOwnerException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotOwnerException(
+            UserNotOwnerException ignoredException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_NOT_OWNER.getMessage()));
     }
 }

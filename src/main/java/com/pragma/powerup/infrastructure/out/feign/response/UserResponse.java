@@ -1,4 +1,4 @@
-package com.pragma.powerup.infrastructure.out.feign.entity;
+package com.pragma.powerup.infrastructure.out.feign.response;
 
 
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserEntity {
+public class UserResponse {
 
     private Long id;
     private String name;
@@ -22,5 +22,5 @@ public class UserEntity {
     private String phone;
     private Date birthDate;
     private String email;
-    private Collection<RoleEntity> roles;
+    private Collection<RoleResponse> roles;
 }

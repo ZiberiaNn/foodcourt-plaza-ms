@@ -5,7 +5,9 @@ public enum ExceptionResponse {
     INVALID_PHONE("The phone format is invalid. It must start with a '+' followed by a maximum of 13 numbers"),
     INVALID_FORMAT("The format of at least one JSON attribute value is invalid. Check that the input data is correct"),
     INVALID_NAME("The name of the restaurant must be a string that does not contain numbers only"),
-    INVALID_NIT("NIT must be a number");
+    INVALID_NIT("NIT must be a number"),
+    USER_NOT_OWNER("The user with the entered ID has no owner role");
+
 
     private final String message;
 

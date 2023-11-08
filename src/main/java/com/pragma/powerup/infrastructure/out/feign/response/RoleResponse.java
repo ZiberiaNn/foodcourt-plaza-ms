@@ -1,4 +1,4 @@
-package com.pragma.powerup.infrastructure.out.feign.entity;
+package com.pragma.powerup.infrastructure.out.feign.response;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class RoleEntity {
+public class RoleResponse {
     private Long id;
     private String name;
 }
