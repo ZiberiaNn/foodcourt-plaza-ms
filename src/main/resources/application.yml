@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/foodcourt_plaza
+    url: jdbc:mysql://localhost:3307/foodcourt_plaza
     username: root
     password: root
 
