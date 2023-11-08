@@ -5,25 +5,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "objectTable")
+@Table(name = "restaurant_table")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ObjectEntity {
+public class RestaurantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "object_id", nullable = false)
+    @Column(name = "restaurant_id", nullable = false)
     private Long id;
-
     @Column(length = 50)
     private String name;
+    @Column(length = 50)
+    private String nit;
+    @Column(length = 50)
+    private String address;
+    @Column(length = 13)
+    private String phone;
+    private String urlLogo;
+    private Long ownerUserId;
 }
