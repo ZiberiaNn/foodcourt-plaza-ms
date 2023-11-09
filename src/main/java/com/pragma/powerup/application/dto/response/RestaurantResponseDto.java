@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collection;
+
 
 @Getter
 @Setter
@@ -21,5 +23,6 @@ public class RestaurantResponseDto {
     @Schema(example = "www.example.com/logo.png")
     private String urlLogo;
     @Schema(example = "0")
-    private Long ownerUserId;
+    private Integer ownerUserIdentityNumber;
+    private Collection<DishResponseDto> dishes;
 }

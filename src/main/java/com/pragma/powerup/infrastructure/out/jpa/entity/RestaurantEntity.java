@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "restaurant_table")
@@ -27,5 +28,7 @@ public class RestaurantEntity {
     @Column(length = 13)
     private String phone;
     private String urlLogo;
-    private Long ownerUserId;
+    @OneToMany(mappedBy = "restaurant")
+    private Collection<DishEntity> dishes;
+    private Integer ownerUserIdentityNumber;
 }
