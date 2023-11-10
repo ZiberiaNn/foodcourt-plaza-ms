@@ -9,7 +9,7 @@ import lombok.Setter;
 public class RestaurantRequestDto {
     @Schema(example = "Example Name")
     private String name;
-    @Schema(example = "123456789")
+    @Schema(example = "987654321")
     private String nit;
     @Schema(example = "Example Address")
     private String address;
@@ -17,6 +17,6 @@ public class RestaurantRequestDto {
     private String phone;
     @Schema(example = "www.example.com/logo.png")
     private String urlLogo;
-    @Schema(example = "0")
+    @Schema(example = "123456879")
     private Integer ownerUserIdentityNumber;
 }

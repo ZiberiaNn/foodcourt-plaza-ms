@@ -21,4 +21,7 @@ public class DishResponseDto {
     private String urlImage;
     @Schema(example = "true")
     private Boolean isActive;
+    @Schema(example = "Example Category")
+    private String category;
+    private RestaurantResponseDto restaurant;
 }

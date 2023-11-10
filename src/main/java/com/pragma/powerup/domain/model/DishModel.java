@@ -1,14 +1,12 @@
 package com.pragma.powerup.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class DishModel {
     private Long id;
     private String name;
@@ -17,4 +15,5 @@ public class DishModel {
     private String urlImage;
     private String category;
     private Boolean isActive;
+    private RestaurantModel restaurant;
 }
