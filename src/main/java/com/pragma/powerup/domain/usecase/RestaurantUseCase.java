@@ -41,7 +41,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new InvalidNameException();
         }
         boolean isUserOwner = false;
-        for(RoleModel userRole : userPersistencePort.getUserById(restaurantModel.getOwnerUserId()).getRoles()){
+        for(RoleModel userRole : userPersistencePort.getUserByIdentityNumber(restaurantModel.getOwnerUserIdentityNumber()).getRoles()){
             if(userRole.getName().equals(RoleModel.RoleEnum.OWNER.getName())){
                 isUserOwner = true;
                 break;

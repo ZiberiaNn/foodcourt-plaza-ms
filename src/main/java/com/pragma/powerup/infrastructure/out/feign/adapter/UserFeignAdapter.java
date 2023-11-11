@@ -16,8 +16,8 @@ public class UserFeignAdapter implements IUserPersistencePort {
     private final IUserFeignClient userFeignClient;
     private final IUserResponseMapper userEntityMapper;
     @Override
-    public UserModel getUserById(Long userId) {
-        UserResponse userResponse = userFeignClient.getUserById(userId);
+    public UserModel getUserByIdentityNumber(Integer identityNumber) {
+        UserResponse userResponse = userFeignClient.getUserByIdentityNumber(identityNumber);
         if (Objects.isNull(userResponse)) {
             throw new NoDataFoundException();
         }

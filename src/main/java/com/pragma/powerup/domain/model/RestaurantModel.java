@@ -1,15 +1,13 @@
 package com.pragma.powerup.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class RestaurantModel {
     private Long id;
     private String name;
@@ -17,5 +15,5 @@ public class RestaurantModel {
     private String address;
     private String phone;
     private String urlLogo;
-    private Long ownerUserId;
+    private Integer ownerUserIdentityNumber;
 }

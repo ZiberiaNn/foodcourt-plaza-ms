@@ -4,13 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 public class RestaurantRequestDto {
     @Schema(example = "Example Name")
     private String name;
-    @Schema(example = "123456789")
+    @Schema(example = "987654321")
     private String nit;
     @Schema(example = "Example Address")
     private String address;
@@ -18,6 +17,6 @@ public class RestaurantRequestDto {
     private String phone;
     @Schema(example = "www.example.com/logo.png")
     private String urlLogo;
-    @Schema(example = "0")
-    private Long ownerUserId;
+    @Schema(example = "123456789")
+    private Integer ownerUserIdentityNumber;
 }

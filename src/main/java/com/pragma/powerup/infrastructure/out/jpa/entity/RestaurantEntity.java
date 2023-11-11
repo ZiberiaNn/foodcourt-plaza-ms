@@ -1,9 +1,6 @@
 package com.pragma.powerup.infrastructure.out.jpa.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder(toBuilder = true)
 public class RestaurantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -27,5 +25,5 @@ public class RestaurantEntity {
     @Column(length = 13)
     private String phone;
     private String urlLogo;
-    private Long ownerUserId;
+    private Integer ownerUserIdentityNumber;
 }

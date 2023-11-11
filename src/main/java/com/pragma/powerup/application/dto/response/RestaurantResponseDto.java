@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+
 @Getter
 @Setter
 public class RestaurantResponseDto {
@@ -12,7 +13,7 @@ public class RestaurantResponseDto {
     private Long id;
     @Schema(example = "Example Name")
     private String name;
-    @Schema(example = "123456789")
+    @Schema(example = "978654321")
     private String nit;
     @Schema(example = "Example Address")
     private String address;
@@ -20,6 +21,6 @@ public class RestaurantResponseDto {
     private String phone;
     @Schema(example = "www.example.com/logo.png")
     private String urlLogo;
-    @Schema(example = "0")
-    private Long ownerUserId;
+    @Schema(example = "123456789")
+    private Integer ownerUserIdentityNumber;
 }
