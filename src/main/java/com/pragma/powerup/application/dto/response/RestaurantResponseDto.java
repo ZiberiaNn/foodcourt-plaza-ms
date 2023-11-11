@@ -21,6 +21,6 @@ public class RestaurantResponseDto {
     private String phone;
     @Schema(example = "www.example.com/logo.png")
     private String urlLogo;
-    @Schema(example = "123456879")
+    @Schema(example = "123456789")
     private Integer ownerUserIdentityNumber;
 }
