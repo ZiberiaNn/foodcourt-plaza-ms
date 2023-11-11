@@ -7,5 +7,7 @@ import java.util.List;
 public interface IDishServicePort {
     DishModel saveDish(DishModel dishModel);
 
+    DishModel updateDishDescAndPrice(Long dishId, DishModel dishModel);
+
     List<DishModel> getAllDishes();
 }

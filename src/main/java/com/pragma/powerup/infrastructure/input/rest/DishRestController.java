@@ -1,5 +1,6 @@
 package com.pragma.powerup.infrastructure.input.rest;
 
+import com.pragma.powerup.application.dto.request.DishDescPriceRequestDto;
 import com.pragma.powerup.application.dto.request.DishRequestDto;
 import com.pragma.powerup.application.dto.response.DishResponseDto;
 import com.pragma.powerup.application.handler.IDishHandler;
@@ -32,6 +33,20 @@ public class DishRestController {
     @PostMapping("/")
     public ResponseEntity<DishResponseDto> saveDish(@RequestBody DishRequestDto dishRequestDto) {
         return new ResponseEntity<>(dishHandler.saveDish(dishRequestDto), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update the price and description of an existing dish")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Dish updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "No data found with entered dishId", content = @Content)
+    })
+    @PatchMapping("/{dishId}")
+    public ResponseEntity<DishResponseDto> updateDishDescAndPrice(
+            @Schema(example = "1") @PathVariable(name = "dishId") Long dishId,
+            @RequestBody DishDescPriceRequestDto dishDescPriceRequestDto
+    ) {
+        return new ResponseEntity<>(dishHandler.updateDishDescAndPrice(dishId ,dishDescPriceRequestDto), HttpStatus.CREATED);
     }
     @Operation(summary = "Get all dishes")
     @ApiResponses(value = {
