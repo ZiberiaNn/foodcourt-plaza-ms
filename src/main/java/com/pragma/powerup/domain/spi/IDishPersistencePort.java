@@ -10,4 +10,5 @@ public interface IDishPersistencePort {
     DishModel partialUpdateDish(Long id, DishModel newDishModel);
 
     List<DishModel> getAllDishes();
+    DishModel getDishById(Long id);
 }

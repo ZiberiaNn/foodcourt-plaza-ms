@@ -21,20 +21,26 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public DishModel saveDish(DishModel dishModel) {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel userModel = userPersistencePort.getUserByEmail(loggedUser.getUsername());
-        if(!Objects.equals(userModel.getIdentityDocument(), dishModel.getRestaurant().getOwnerUserIdentityNumber())){
-            throw new UserNotOwnerException();
-        }
+        checkLoggedUserOwnership(dishModel, loggedUser);
         return dishPersistencePort.saveDish(dishModel);
     }
 
     @Override
     public DishModel updateDishDescAndPrice(Long dishId, DishModel dishModel) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        DishModel existingDishModel = dishPersistencePort.getDishById(dishId);
+        checkLoggedUserOwnership(existingDishModel, loggedUser);
         return dishPersistencePort.partialUpdateDish(dishId, dishModel);
     }
 
     @Override
     public List<DishModel> getAllDishes() {
         return dishPersistencePort.getAllDishes();
+    }
+    private void checkLoggedUserOwnership(DishModel dishModel, User loggedUser) {
+        UserModel loggedUserModel = userPersistencePort.getUserByEmail(loggedUser.getUsername());
+        if(!Objects.equals(loggedUserModel.getIdentityDocument(), dishModel.getRestaurant().getOwnerUserIdentityNumber())){
+            throw new UserNotOwnerException();
+        }
     }
 }

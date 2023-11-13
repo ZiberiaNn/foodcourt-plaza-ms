@@ -9,6 +9,7 @@ import com.pragma.powerup.infrastructure.out.jpa.repository.IDishRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -37,5 +38,14 @@ public class DishJpaAdapter implements IDishPersistencePort {
             throw new NoDataFoundException();
         }
         return dishEntityMapper.toModelList(dishEntityList);
+    }
+
+    @Override
+    public DishModel getDishById(Long id) {
+        Optional<DishEntity> dishEntity = dishRepository.findById(id);
+        if (dishEntity.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+        return dishEntityMapper.toModel(dishEntity.get());
     }
 }
