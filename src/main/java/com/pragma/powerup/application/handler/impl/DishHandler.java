@@ -8,6 +8,7 @@ import com.pragma.powerup.application.mapper.IDishDescPriceRequestMapper;
 import com.pragma.powerup.application.mapper.IDishRequestMapper;
 import com.pragma.powerup.application.mapper.IDishResponseMapper;
 import com.pragma.powerup.domain.api.IDishServicePort;
+import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.model.DishModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 public class DishHandler implements IDishHandler {
 
     private final IDishServicePort dishServicePort;
+    private final IRestaurantServicePort restaurantServicePort;
     private final IDishRequestMapper dishRequestMapper;
     private final IDishDescPriceRequestMapper dishDescPriceRequestMapper;
 
@@ -30,6 +32,7 @@ public class DishHandler implements IDishHandler {
     @Override
     public DishResponseDto saveDish(DishRequestDto dishRequestDto) {
         DishModel dishModel = dishRequestMapper.toModel(dishRequestDto);
+        dishModel.setRestaurant(restaurantServicePort.getRestaurantById(dishModel.getRestaurant().getId()));
         return dishResponseMapper.toResponse(dishServicePort.saveDish(dishModel));
     }
     @Override

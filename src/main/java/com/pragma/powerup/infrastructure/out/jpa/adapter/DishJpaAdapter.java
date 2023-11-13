@@ -23,7 +23,7 @@ public class DishJpaAdapter implements IDishPersistencePort {
         return dishEntityMapper.toModel(dishEntity);
     }
     @Override
-    public DishModel updateDish(Long id, DishModel newDishModel) {
+    public DishModel partialUpdateDish(Long id, DishModel newDishModel) {
         return dishRepository.findById(id).map(dishEntity -> {
             dishEntityMapper.partialUpdate(newDishModel, dishEntity);
             return dishEntityMapper.toModel(dishRepository.save(dishEntity));
