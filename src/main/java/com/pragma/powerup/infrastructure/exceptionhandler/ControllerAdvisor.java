@@ -6,6 +6,7 @@ import com.pragma.powerup.domain.exception.invalid.InvalidNameException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNitException;
 import com.pragma.powerup.domain.exception.invalid.InvalidPhoneException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -52,5 +53,11 @@ public class ControllerAdvisor {
             UserNotOwnerException ignoredException) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_NOT_OWNER.getMessage()));
+    }
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<Map<String, String>> handleFeignExceptionBadRequest(
+            FeignException.BadRequest ignoredException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.FEIGN_BAD_REQUEST.getMessage()));
     }
 }

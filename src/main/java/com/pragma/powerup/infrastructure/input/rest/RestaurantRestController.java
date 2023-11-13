@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,9 @@ import java.util.List;
 public class RestaurantRestController {
 
     private final IRestaurantHandler restaurantHandler;
-
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).ADMIN.toString()" +
+            ")")
     @Operation(summary = "Add a new restaurant")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Restaurant created",
@@ -45,5 +48,4 @@ public class RestaurantRestController {
     public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
         return ResponseEntity.ok(restaurantHandler.getAllRestaurants());
     }
-
 }

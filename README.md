@@ -31,13 +31,14 @@ To get a local copy up and running follow these steps.
 
 ### Installation
 
-1. Clone the repo
-2. Change directory
+1. Clone https://github.com/ZiberiaNn/foodcourt-users-ms repo and follow its instructions
+2. Clone this repo
+3. Change directory
    ```sh
    cd power-up-arquetipo
    ```
-3. Create a new database in MySQL called foodcourt_plaza
-4. Update the database connection settings 
+4. Create a new database in MySQL called foodcourt_plaza
+5. Update the database connection settings 
    ```yml
    # src/main/resources/application.yml   
    spring:

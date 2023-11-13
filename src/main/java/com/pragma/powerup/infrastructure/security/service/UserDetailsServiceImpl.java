@@ -1,6 +1,6 @@
 package com.pragma.powerup.infrastructure.security.service;
 
-import com.pragma.powerup.domain.model.UserModel;
+import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

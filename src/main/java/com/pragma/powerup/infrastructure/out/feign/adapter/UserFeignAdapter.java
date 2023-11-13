@@ -1,6 +1,6 @@
 package com.pragma.powerup.infrastructure.out.feign.adapter;
 
-import com.pragma.powerup.domain.model.UserModel;
+import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
 import com.pragma.powerup.infrastructure.out.feign.client.IUserFeignClient;
