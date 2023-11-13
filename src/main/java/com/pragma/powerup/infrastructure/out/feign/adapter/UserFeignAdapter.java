@@ -23,4 +23,13 @@ public class UserFeignAdapter implements IUserPersistencePort {
         }
         return userEntityMapper.toModel(userResponse);
     }
+
+    @Override
+    public UserModel getUserByEmail(String email) {
+        UserResponse userResponse = userFeignClient.getUserByEmail(email);
+        if (Objects.isNull(userResponse)) {
+            throw new NoDataFoundException();
+        }
+        return userEntityMapper.toModel(userResponse);
+    }
 }

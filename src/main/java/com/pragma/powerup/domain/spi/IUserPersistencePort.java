@@ -5,4 +5,6 @@ import com.pragma.powerup.domain.model.UserModel;
 public interface IUserPersistencePort {
 
     UserModel getUserByIdentityNumber(Integer identityNumber);
+
+    UserModel getUserByEmail(String email);
 }

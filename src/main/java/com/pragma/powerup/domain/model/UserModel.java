@@ -20,5 +20,6 @@ public class UserModel {
     private String phone;
     private Date birthDate;
     private String email;
+    private String password;
     private Collection<RoleModel> roles;
 }
