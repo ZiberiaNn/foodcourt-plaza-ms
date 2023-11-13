@@ -1,4 +1,4 @@
-package com.pragma.powerup.domain.model;
+package com.pragma.powerup.domain.model.auth;
 
 import lombok.*;
 

@@ -6,11 +6,13 @@ import com.pragma.powerup.domain.exception.invalid.InvalidNameException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNitException;
 import com.pragma.powerup.domain.exception.invalid.InvalidPhoneException;
 import com.pragma.powerup.infrastructure.exception.NoDataFoundException;
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -50,7 +52,19 @@ public class ControllerAdvisor {
     @ExceptionHandler(UserNotOwnerException.class)
     public ResponseEntity<Map<String, String>> handleUserNotOwnerException(
             UserNotOwnerException ignoredException) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_NOT_OWNER.getMessage()));
+    }
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<Map<String, String>> handleFeignExceptionBadRequest(
+            FeignException.BadRequest ignoredException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.FEIGN_BAD_REQUEST.getMessage()));
+    }
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleSQLIntegrityConstraintViolationException(
+            SQLIntegrityConstraintViolationException ignoredException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(MESSAGE, ignoredException.getMessage()));
     }
 }

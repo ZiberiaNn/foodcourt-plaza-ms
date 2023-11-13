@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,11 +31,16 @@ public class DishRestController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishResponseDto.class))),
             @ApiResponse(responseCode = "409", description = "Dish already exists", content = @Content)
     })
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).OWNER.toString()" +
+            ")")
     @PostMapping("/")
     public ResponseEntity<DishResponseDto> saveDish(@RequestBody DishRequestDto dishRequestDto) {
         return new ResponseEntity<>(dishHandler.saveDish(dishRequestDto), HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).OWNER.toString()" +
+            ")")
     @Operation(summary = "Update the price and description of an existing dish")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Dish updated",

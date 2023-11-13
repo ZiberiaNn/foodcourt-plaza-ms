@@ -7,7 +7,7 @@ import com.pragma.powerup.domain.exception.invalid.InvalidNameException;
 import com.pragma.powerup.domain.exception.invalid.InvalidNitException;
 import com.pragma.powerup.domain.exception.invalid.InvalidPhoneException;
 import com.pragma.powerup.domain.model.RestaurantModel;
-import com.pragma.powerup.domain.model.RoleModel;
+import com.pragma.powerup.domain.model.auth.RoleModel;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.AllArgsConstructor;
@@ -56,5 +56,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public List<RestaurantModel> getAllRestaurants() {
         return restaurantPersistencePort.getAllRestaurants();
+    }
+
+    @Override
+    public RestaurantModel getRestaurantById(Long id) {
+        return restaurantPersistencePort.getRestaurantById(id);
     }
 }

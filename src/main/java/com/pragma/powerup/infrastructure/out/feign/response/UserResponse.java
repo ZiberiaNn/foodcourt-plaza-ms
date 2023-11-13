@@ -22,5 +22,6 @@ public class UserResponse {
     private String phone;
     private Date birthDate;
     private String email;
+    private String password;
     private Collection<RoleResponse> roles;
 }

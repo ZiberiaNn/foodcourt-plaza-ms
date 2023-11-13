@@ -1,6 +1,6 @@
 package com.pragma.powerup.infrastructure.out.feign.mapper;
 
-import com.pragma.powerup.domain.model.UserModel;
+import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.infrastructure.out.feign.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

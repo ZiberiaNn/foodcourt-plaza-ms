@@ -1,4 +1,4 @@
-package com.pragma.powerup.domain.model;
+package com.pragma.powerup.domain.model.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +20,6 @@ public class UserModel {
     private String phone;
     private Date birthDate;
     private String email;
+    private String password;
     private Collection<RoleModel> roles;
 }
