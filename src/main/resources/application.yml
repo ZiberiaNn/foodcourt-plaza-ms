@@ -11,5 +11,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+jwt:
+  token:
+    validity: 18000
+    prefix: Bearer
+  signing:
+    key: signingkey
+  authorities:
+    key: roles
+  header:
+    string: Authorization
+
 appDescription: "FoodCourt plaza microservice"
 appVersion: "1.0.0"
