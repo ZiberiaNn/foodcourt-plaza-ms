@@ -7,6 +7,8 @@ import com.pragma.powerup.infrastructure.out.jpa.entity.DishEntity;
 import com.pragma.powerup.infrastructure.out.jpa.mapper.IDishEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IDishRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,14 @@ public class DishJpaAdapter implements IDishPersistencePort {
         return dishEntityMapper.toModelList(dishEntityList);
     }
 
+    @Override
+    public Page<DishModel> getDishesByRestaurantAndCategory(Long restaurantId, String category, Pageable pageable) {
+        Page<DishEntity> dishEntityPage = dishRepository.findByRestaurant_Id(restaurantId, pageable);
+        if (dishEntityPage.getTotalElements()==0) {
+            throw new NoDataFoundException();
+        }
+        return dishEntityPage.map(dishEntityMapper::toModel);
+    }
     @Override
     public DishModel getDishById(Long id) {
         Optional<DishEntity> dishEntity = dishRepository.findById(id);
