@@ -1,10 +1,12 @@
 package com.pragma.powerup.application.handler.impl;
 
 import com.pragma.powerup.application.dto.request.DishDescPriceRequestDto;
+import com.pragma.powerup.application.dto.request.DishIsActiveRequestDto;
 import com.pragma.powerup.application.dto.request.DishRequestDto;
 import com.pragma.powerup.application.dto.response.DishResponseDto;
 import com.pragma.powerup.application.handler.IDishHandler;
 import com.pragma.powerup.application.mapper.IDishDescPriceRequestMapper;
+import com.pragma.powerup.application.mapper.IDishIsActiveMapper;
 import com.pragma.powerup.application.mapper.IDishRequestMapper;
 import com.pragma.powerup.application.mapper.IDishResponseMapper;
 import com.pragma.powerup.domain.api.IDishServicePort;
@@ -26,6 +28,8 @@ public class DishHandler implements IDishHandler {
     private final IRestaurantServicePort restaurantServicePort;
     private final IDishRequestMapper dishRequestMapper;
     private final IDishDescPriceRequestMapper dishDescPriceRequestMapper;
+    private final IDishIsActiveMapper dishIsActiveMapper;
+
 
     private final IDishResponseMapper dishResponseMapper;
 
@@ -42,6 +46,12 @@ public class DishHandler implements IDishHandler {
     @Override
     public DishResponseDto updateDishDescAndPrice(Long dishId, DishDescPriceRequestDto dishRequestDto) {
         DishModel dishModel = dishDescPriceRequestMapper.toModel(dishRequestDto);
-        return dishResponseMapper.toResponse(dishServicePort.updateDishDescAndPrice(dishId,dishModel));
+        return dishResponseMapper.toResponse(dishServicePort.partialUpdateDishModel(dishId,dishModel));
+    }
+
+    @Override
+    public DishResponseDto updateDishIsActive(Long dishId, DishIsActiveRequestDto dishIsActiveRequestDto) {
+        DishModel dishModel = dishIsActiveMapper.toModel(dishIsActiveRequestDto);
+        return dishResponseMapper.toResponse(dishServicePort.partialUpdateDishModel(dishId,dishModel));
     }
 }
