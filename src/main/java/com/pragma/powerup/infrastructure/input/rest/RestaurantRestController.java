@@ -1,7 +1,8 @@
 package com.pragma.powerup.infrastructure.input.rest;
 
 import com.pragma.powerup.application.dto.request.RestaurantRequestDto;
-import com.pragma.powerup.application.dto.response.RestaurantResponseDto;
+import com.pragma.powerup.application.dto.response.RestaurantGetResponseDto;
+import com.pragma.powerup.application.dto.response.RestaurantSavedResponseDto;
 import com.pragma.powerup.application.handler.IRestaurantHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -29,11 +30,11 @@ public class RestaurantRestController {
     @Operation(summary = "Add a new restaurant")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Restaurant created",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantResponseDto.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantSavedResponseDto.class))),
             @ApiResponse(responseCode = "409", description = "Restaurant already exists", content = @Content)
     })
     @PostMapping("/")
-    public ResponseEntity<RestaurantResponseDto> saveRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto) {
+    public ResponseEntity<RestaurantSavedResponseDto> saveRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto) {
         return new ResponseEntity<>(restaurantHandler.saveRestaurant(restaurantRequestDto), HttpStatus.CREATED);
     }
 
@@ -41,11 +42,12 @@ public class RestaurantRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All restaurants returned",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = RestaurantResponseDto.class)))),
+                            array = @ArraySchema(schema = @Schema(implementation = RestaurantGetResponseDto.class)))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping("/")
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantHandler.getAllRestaurants());
+    public ResponseEntity<List<RestaurantGetResponseDto>> getRestaurantsOrderedByName(@RequestParam("page") int page,
+                                                                                                  @RequestParam("size") int size) {
+        return ResponseEntity.ok(restaurantHandler.getRestaurantsOrderedByName(page, size));
     }
 }

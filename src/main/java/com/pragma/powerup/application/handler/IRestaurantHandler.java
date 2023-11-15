@@ -1,13 +1,15 @@
 package com.pragma.powerup.application.handler;
 
 import com.pragma.powerup.application.dto.request.RestaurantRequestDto;
-import com.pragma.powerup.application.dto.response.RestaurantResponseDto;
+import com.pragma.powerup.application.dto.response.RestaurantGetResponseDto;
+import com.pragma.powerup.application.dto.response.RestaurantSavedResponseDto;
 
 import java.util.List;
 
 public interface IRestaurantHandler {
 
-    RestaurantResponseDto saveRestaurant(RestaurantRequestDto restaurantRequestDto);
+    RestaurantSavedResponseDto saveRestaurant(RestaurantRequestDto restaurantRequestDto);
 
-    List<RestaurantResponseDto> getAllRestaurants();
+
+    List<RestaurantGetResponseDto> getRestaurantsOrderedByName(int page, int size);
 }

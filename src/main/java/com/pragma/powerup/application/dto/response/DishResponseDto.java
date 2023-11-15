@@ -23,5 +23,5 @@ public class DishResponseDto {
     private Boolean isActive;
     @Schema(example = "Example Category")
     private String category;
-    private RestaurantResponseDto restaurant;
+    private RestaurantSavedResponseDto restaurant;
 }
