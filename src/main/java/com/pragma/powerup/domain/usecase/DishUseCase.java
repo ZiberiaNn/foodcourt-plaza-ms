@@ -20,16 +20,14 @@ public class DishUseCase implements IDishServicePort {
     IUserPersistencePort userPersistencePort;
     @Override
     public DishModel saveDish(DishModel dishModel) {
-        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        checkLoggedUserOwnership(dishModel, loggedUser);
+        checkLoggedUserOwnershipOfRestaurant(dishModel);
         return dishPersistencePort.saveDish(dishModel);
     }
 
     @Override
-    public DishModel updateDishDescAndPrice(Long dishId, DishModel dishModel) {
-        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public DishModel partialUpdateDishModel(Long dishId, DishModel dishModel) {
         DishModel existingDishModel = dishPersistencePort.getDishById(dishId);
-        checkLoggedUserOwnership(existingDishModel, loggedUser);
+        checkLoggedUserOwnershipOfRestaurant(existingDishModel);
         return dishPersistencePort.partialUpdateDish(dishId, dishModel);
     }
 
@@ -37,9 +35,10 @@ public class DishUseCase implements IDishServicePort {
     public List<DishModel> getAllDishes() {
         return dishPersistencePort.getAllDishes();
     }
-    private void checkLoggedUserOwnership(DishModel dishModel, User loggedUser) {
+    private void checkLoggedUserOwnershipOfRestaurant(DishModel restaurantDish) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel loggedUserModel = userPersistencePort.getUserByEmail(loggedUser.getUsername());
-        if(!Objects.equals(loggedUserModel.getIdentityDocument(), dishModel.getRestaurant().getOwnerUserIdentityNumber())){
+        if(!Objects.equals(loggedUserModel.getIdentityDocument(), restaurantDish.getRestaurant().getOwnerUserIdentityNumber())){
             throw new UserNotOwnerException();
         }
     }
