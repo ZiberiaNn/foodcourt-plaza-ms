@@ -13,6 +13,9 @@ import com.pragma.powerup.domain.api.IDishServicePort;
 import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.model.DishModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +46,13 @@ public class DishHandler implements IDishHandler {
     public List<DishResponseDto> getAllDishes() {
         return dishResponseMapper.toResponseList(dishServicePort.getAllDishes());
     }
+
+    @Override
+    public Page<DishResponseDto> getDishesByRestaurantAndCategory(Long restaurantId, String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return dishServicePort.getDishesByRestaurantAndCategory(restaurantId, category, pageable).map(dishResponseMapper::toResponse);
+    }
+
     @Override
     public DishResponseDto updateDishDescAndPrice(Long dishId, DishDescPriceRequestDto dishRequestDto) {
         DishModel dishModel = dishDescPriceRequestMapper.toModel(dishRequestDto);

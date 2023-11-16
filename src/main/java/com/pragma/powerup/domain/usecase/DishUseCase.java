@@ -7,6 +7,8 @@ import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -35,6 +37,12 @@ public class DishUseCase implements IDishServicePort {
     public List<DishModel> getAllDishes() {
         return dishPersistencePort.getAllDishes();
     }
+
+    @Override
+    public Page<DishModel> getDishesByRestaurantAndCategory(Long restaurantId, String category, Pageable pageable) {
+        return dishPersistencePort.getDishesByRestaurantAndCategory(restaurantId, category, pageable);
+    }
+
     private void checkLoggedUserOwnershipOfRestaurant(DishModel restaurantDish) {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel loggedUserModel = userPersistencePort.getUserByEmail(loggedUser.getUsername());
