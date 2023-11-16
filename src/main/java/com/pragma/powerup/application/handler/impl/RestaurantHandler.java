@@ -10,11 +10,10 @@ import com.pragma.powerup.application.mapper.IRestaurantSavedResponseMapper;
 import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.model.RestaurantModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +33,8 @@ public class RestaurantHandler implements IRestaurantHandler {
     }
 
     @Override
-    public List<RestaurantGetResponseDto> getRestaurantsOrderedByName(int page, int size) {
+    public Page<RestaurantGetResponseDto> getRestaurantsOrderedByName(int page, int size) {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-        return restaurantGetResponseMapper.toResponseList(restaurantServicePort.getRestaurantsOrderedByName(pageable));
+        return restaurantServicePort.getRestaurantsOrderedByName(pageable).map(restaurantGetResponseMapper::toResponse);
     }
 }
