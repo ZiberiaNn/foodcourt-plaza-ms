@@ -44,7 +44,7 @@ public class DishJpaAdapter implements IDishPersistencePort {
 
     @Override
     public Page<DishModel> getDishesByRestaurantAndCategory(Long restaurantId, String category, Pageable pageable) {
-        Page<DishEntity> dishEntityPage = dishRepository.findByRestaurant_Id(restaurantId, pageable);
+        Page<DishEntity> dishEntityPage = dishRepository.findByRestaurantAndCategory(restaurantId,category, pageable);
         if (dishEntityPage.getTotalElements()==0) {
             throw new NoDataFoundException();
         }
