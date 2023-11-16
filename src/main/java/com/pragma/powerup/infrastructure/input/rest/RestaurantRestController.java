@@ -19,8 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/restaurants")
 @RequiredArgsConstructor
@@ -44,7 +42,7 @@ public class RestaurantRestController {
     @PreAuthorize("hasRole(" +
             "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).CLIENT.toString()" +
             ")")
-    @Operation(summary = "Get all restaurants")
+    @Operation(summary = "Get all restaurants ordered by name")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All restaurants returned",
                     content = @Content(mediaType = "application/json",
@@ -52,8 +50,8 @@ public class RestaurantRestController {
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping("/")
-    public ResponseEntity<List<RestaurantGetResponseDto>> getRestaurantsOrderedByName(@RequestParam("page") int page,
-                                                                                                  @RequestParam("size") int size) {
+    public ResponseEntity<Page<RestaurantGetResponseDto>> getRestaurantsOrderedByName(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                                                      @RequestParam(name = "size", defaultValue = "3") int size) {
         return ResponseEntity.ok(restaurantHandler.getRestaurantsOrderedByName(page, size));
     }
     @PreAuthorize("hasRole(" +
