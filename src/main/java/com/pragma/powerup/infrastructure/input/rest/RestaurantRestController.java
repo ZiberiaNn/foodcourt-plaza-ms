@@ -70,8 +70,8 @@ public class RestaurantRestController {
     public ResponseEntity<Page<DishResponseDto>> getDishesFromRestaurantAndCategory(
             @Schema(example = "1") @PathVariable(name = "restaurantId") Long restaurantId,
             @RequestParam(name = "category", required = false) String category,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size) {
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "3") int size) {
         return ResponseEntity.ok(dishHandler.getDishesByRestaurantAndCategory(restaurantId, category, page, size));
     }
 }
