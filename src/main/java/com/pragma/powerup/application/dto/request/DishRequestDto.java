@@ -17,8 +17,7 @@ public class DishRequestDto {
     private String urlImage;
     @Schema(example = "true")
     private Boolean isActive;
-    @Schema(example = "Example Category")
-    private String category;
+    private Long categoryId;
     @Schema(example = "1")
     private Long restaurantId;
 }

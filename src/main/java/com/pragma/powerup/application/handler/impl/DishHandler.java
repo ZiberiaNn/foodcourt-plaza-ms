@@ -9,6 +9,7 @@ import com.pragma.powerup.application.mapper.IDishDescPriceRequestMapper;
 import com.pragma.powerup.application.mapper.IDishIsActiveMapper;
 import com.pragma.powerup.application.mapper.IDishRequestMapper;
 import com.pragma.powerup.application.mapper.IDishResponseMapper;
+import com.pragma.powerup.domain.api.ICategoryServicePort;
 import com.pragma.powerup.domain.api.IDishServicePort;
 import com.pragma.powerup.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.domain.model.DishModel;
@@ -28,18 +29,20 @@ import java.util.List;
 public class DishHandler implements IDishHandler {
 
     private final IDishServicePort dishServicePort;
-    private final IRestaurantServicePort restaurantServicePort;
     private final IDishRequestMapper dishRequestMapper;
     private final IDishDescPriceRequestMapper dishDescPriceRequestMapper;
     private final IDishIsActiveMapper dishIsActiveMapper;
-
-
     private final IDishResponseMapper dishResponseMapper;
+
+    private final IRestaurantServicePort restaurantServicePort;
+    private final ICategoryServicePort categoryServicePort;
+
 
     @Override
     public DishResponseDto saveDish(DishRequestDto dishRequestDto) {
         DishModel dishModel = dishRequestMapper.toModel(dishRequestDto);
         dishModel.setRestaurant(restaurantServicePort.getRestaurantById(dishModel.getRestaurant().getId()));
+        dishModel.setCategory(categoryServicePort.getCategoryById(dishModel.getCategory().getId()));
         return dishResponseMapper.toResponse(dishServicePort.saveDish(dishModel));
     }
     @Override
