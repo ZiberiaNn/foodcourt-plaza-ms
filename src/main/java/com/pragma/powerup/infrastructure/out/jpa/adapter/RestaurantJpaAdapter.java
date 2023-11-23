@@ -29,7 +29,7 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public Page<RestaurantModel> getRestaurantsOrderedByName(Pageable pageable) {
         Page<RestaurantEntity> entityPage = restaurantRepository.findAllByOrderByNameAsc(pageable);
         if (entityPage.isEmpty()) {
-            throw new NoDataFoundException();
+            throw new NoDataFoundException("No restaurants found");
         }
         return entityPage.map(restaurantEntityMapper::toModel);
     }
@@ -37,7 +37,7 @@ public class RestaurantJpaAdapter implements IRestaurantPersistencePort {
     public RestaurantModel getRestaurantById(Long id) {
         Optional<RestaurantEntity> entity = restaurantRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new NoDataFoundException();
+            throw new NoDataFoundException("No restaurant found with id: " + id);
         }
         return restaurantEntityMapper.toModel(entity.get());
     }

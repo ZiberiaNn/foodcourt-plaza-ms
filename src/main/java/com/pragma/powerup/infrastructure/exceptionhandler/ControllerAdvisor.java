@@ -23,7 +23,7 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> handleNoDataFoundException(
             NoDataFoundException ignoredNoDataFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.NO_DATA_FOUND.getMessage()));
+                .body(Collections.singletonMap(MESSAGE, ignoredNoDataFoundException.getMessage()));
     }
     @ExceptionHandler(InvalidNitException.class)
     public ResponseEntity<Map<String, String>> handleInvalidNitException(

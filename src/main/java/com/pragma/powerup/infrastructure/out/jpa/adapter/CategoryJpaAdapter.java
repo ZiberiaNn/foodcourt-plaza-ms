@@ -26,7 +26,7 @@ public class CategoryJpaAdapter implements ICategoryPersistencePort {
     public CategoryModel getCategoryById(Long id) {
         Optional<CategoryEntity> entity = categoryRepository.findById(id);
         if (entity.isEmpty()) {
-            throw new NoDataFoundException();
+            throw new NoDataFoundException("No category found with id: " + id);
         }
         return categoryEntityMapper.toModel(entity.get());
     }
@@ -35,7 +35,7 @@ public class CategoryJpaAdapter implements ICategoryPersistencePort {
     public List<CategoryModel> getAllCategories() {
         List<CategoryEntity> categoryEntityList = categoryRepository.findAll();
         if (categoryEntityList.isEmpty()) {
-            throw new NoDataFoundException();
+            throw new NoDataFoundException("No categories found");
         }
         return categoryEntityMapper.toModelList(categoryEntityList);
     }
