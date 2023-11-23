@@ -13,7 +13,7 @@ public class DishModel {
     private Integer price;
     private String description;
     private String urlImage;
-    private String category;
+    private CategoryModel category;
     private Boolean isActive;
     private RestaurantModel restaurant;
 }
