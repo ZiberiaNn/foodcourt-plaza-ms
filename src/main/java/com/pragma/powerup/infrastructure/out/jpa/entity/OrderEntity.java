@@ -19,6 +19,7 @@ public class OrderEntity {
     @Id
     @Column(name = "order_id", nullable = false, unique = true)
     private Long id;
+    private Integer clientIdentityNumber;
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private RestaurantEntity restaurant;

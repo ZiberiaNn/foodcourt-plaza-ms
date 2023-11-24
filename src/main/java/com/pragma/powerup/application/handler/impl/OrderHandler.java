@@ -25,7 +25,7 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public OrderResponseDto saveOrder(OrderRequestDto orderRequestDto) {
         OrderModel orderModel = orderRequestMapper.toModel(orderRequestDto);
-        return orderResponseMapper.toResponse(orderServicePort.saveModel(orderModel));
+        return orderResponseMapper.toResponse(orderServicePort.createOrder(orderModel));
     }
 
     @Override
