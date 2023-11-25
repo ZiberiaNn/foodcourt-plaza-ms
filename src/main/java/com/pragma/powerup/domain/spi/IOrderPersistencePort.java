@@ -7,5 +7,9 @@ import java.util.List;
 public interface IOrderPersistencePort {
     OrderModel saveOrder(OrderModel orderModel);
     OrderModel getOrderById(Long id);
+
+
+    List<OrderModel> getOrderByClientIdentityNumber(Integer clientIdentityNumber);
+
     List<OrderModel> getAllOrders();
 }

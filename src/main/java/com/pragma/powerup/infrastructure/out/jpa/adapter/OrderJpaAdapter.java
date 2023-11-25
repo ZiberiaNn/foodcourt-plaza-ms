@@ -40,6 +40,14 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
         return orderEntityMapper.toModel(entity.get());
     }
     @Override
+    public List<OrderModel> getOrderByClientIdentityNumber(Integer clientIdentityNumber) {
+        List<OrderEntity> orderEntityList = orderRepository.findByClientIdentityNumber(clientIdentityNumber);
+        if (orderEntityList.isEmpty()) {
+            throw new NoDataFoundException("No order found with client identity number: " + clientIdentityNumber);
+        }
+        return orderEntityMapper.toModelList(orderEntityList);
+    }
+    @Override
     public List<OrderModel> getAllOrders() {
         List<OrderEntity> orderEntityList = orderRepository.findAll();
         if (orderEntityList.isEmpty()) {

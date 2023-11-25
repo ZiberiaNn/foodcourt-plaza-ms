@@ -8,6 +8,5 @@ import java.util.List;
 @Setter
 public class OrderRequestDto {
     private Long restaurantId;
-    private String status;
     private List<OrderDishQtyRequestDto> dishQtyList;
 }
