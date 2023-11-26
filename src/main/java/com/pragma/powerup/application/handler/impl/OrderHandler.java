@@ -33,12 +33,10 @@ public class OrderHandler implements IOrderHandler {
         OrderModel orderModel = orderRequestMapper.toModel(orderRequestDto);
         return orderResponseMapper.toResponse(orderServicePort.createOrder(orderModel, loggedUser.getUsername()));
     }
-
     @Override
     public OrderResponseDto getOrderById(Long id) {
         return orderResponseMapper.toResponse(orderServicePort.getOrderById(id));
     }
-
     @Override
     public List<OrderResponseDto> getAllOrders() {
         return orderResponseMapper.toResponseList(orderServicePort.getAllOrders());
@@ -48,5 +46,10 @@ public class OrderHandler implements IOrderHandler {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         return orderServicePort.getOrdersByStatusAndIfEmployeeBelongsToOrder(status.getName(), pageable, loggedUser.getUsername()).map(orderResponseMapper::toResponse);
+    }
+    @Override
+    public OrderResponseDto updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return orderResponseMapper.toResponse(orderServicePort.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId, loggedUser.getUsername()));
     }
 }

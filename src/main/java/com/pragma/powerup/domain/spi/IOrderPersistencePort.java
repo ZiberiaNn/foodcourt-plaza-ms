@@ -16,4 +16,5 @@ public interface IOrderPersistencePort {
     List<OrderModel> getAllOrders();
 
     Page<OrderModel> getOrdersByStatus(String status, Pageable pageable);
+    OrderModel updateOrder(OrderModel orderModel);
 }

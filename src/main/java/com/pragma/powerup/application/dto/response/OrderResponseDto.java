@@ -10,6 +10,7 @@ import java.util.List;
 public class OrderResponseDto {
     private Long id;
     private Integer clientIdentityNumber;
+    private RestaurantEmployeeResponseDto assignedEmployee;
     private RestaurantGetResponseDto restaurant;
     private StatusEnum status;
     private List<OrderDishQtyResponseDto> dishQtyList;

@@ -12,4 +12,6 @@ public interface IOrderHandler {
     OrderResponseDto getOrderById(Long id);
     List<OrderResponseDto> getAllOrders();
     Page<OrderResponseDto> getOrdersByStatusAndIfEmployeeBelongsToOrder(StatusEnum status, int page, int size);
+
+    OrderResponseDto updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId);
 }

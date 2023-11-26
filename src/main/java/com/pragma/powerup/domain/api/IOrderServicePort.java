@@ -11,4 +11,6 @@ public interface IOrderServicePort {
     OrderModel getOrderById(Long id);
     List<OrderModel> getAllOrders();
     Page<OrderModel> getOrdersByStatusAndIfEmployeeBelongsToOrder(String status, Pageable pageable, String loggedUserEmail) ;
+
+    OrderModel updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId, String loggedUserEmail);
 }

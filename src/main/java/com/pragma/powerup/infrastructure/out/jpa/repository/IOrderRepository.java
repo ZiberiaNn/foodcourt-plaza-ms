@@ -11,4 +11,5 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
     List<OrderEntity> findByClientIdentityNumber(Integer clientIdentityNumber);
 
     Page<OrderEntity> findByStatusIgnoreCase(String status, Pageable pageable);
+
 }

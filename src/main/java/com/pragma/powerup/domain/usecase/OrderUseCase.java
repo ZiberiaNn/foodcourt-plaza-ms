@@ -75,4 +75,15 @@ public class OrderUseCase implements IOrderServicePort {
         }
         return filteredOrderPage;
     }
+    @Override
+    public OrderModel updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId, String loggedUserEmail) {
+        OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
+        RestaurantEmployeeModel restaurantEmployee = restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail);
+        if(!Objects.equals(orderModel.getRestaurant().getId(), restaurantEmployee.getRestaurant().getId())){
+            throw new DomainException("The order does not belong to the employee's restaurant");
+        }
+        orderModel.setStatus(StatusEnum.EN_PREPARACION);
+        orderModel.setAssignedEmployee(restaurantEmployee);
+        return orderPersistencePort.updateOrder(orderModel);
+    }
 }

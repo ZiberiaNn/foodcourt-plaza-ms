@@ -79,4 +79,18 @@ public class OrderRestController {
     ) {
         return ResponseEntity.ok(orderHandler.getOrdersByStatusAndIfEmployeeBelongsToOrder(status, page, size));
     }
+
+    @Operation(summary = "Update an existing order assigned employee and status to 'En preparacion'")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).EMPLOYEE.toString()" +
+            ")")
+    @PatchMapping("/employee-and-status/{existingOrderId}")
+    public ResponseEntity<OrderResponseDto> updateOrderAssignedEmployeeAndStatusToEnPreparacion(@PathVariable Long existingOrderId) {
+        return new ResponseEntity<>(orderHandler.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId), HttpStatus.CREATED);
+    }
 }
