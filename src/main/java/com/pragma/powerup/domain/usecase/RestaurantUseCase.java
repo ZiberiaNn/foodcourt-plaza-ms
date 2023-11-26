@@ -11,8 +11,9 @@ import com.pragma.powerup.domain.model.auth.RoleModel;
 import com.pragma.powerup.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.regex.Pattern;
 @AllArgsConstructor
 public class RestaurantUseCase implements IRestaurantServicePort {
@@ -54,8 +55,8 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
-    public List<RestaurantModel> getAllRestaurants() {
-        return restaurantPersistencePort.getAllRestaurants();
+    public Page<RestaurantModel> getRestaurantsOrderedByName(Pageable pageable) {
+        return restaurantPersistencePort.getRestaurantsOrderedByName(pageable);
     }
 
     @Override

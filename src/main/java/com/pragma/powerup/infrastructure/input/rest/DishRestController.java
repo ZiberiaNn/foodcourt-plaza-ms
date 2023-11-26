@@ -1,6 +1,7 @@
 package com.pragma.powerup.infrastructure.input.rest;
 
 import com.pragma.powerup.application.dto.request.DishDescPriceRequestDto;
+import com.pragma.powerup.application.dto.request.DishIsActiveRequestDto;
 import com.pragma.powerup.application.dto.request.DishRequestDto;
 import com.pragma.powerup.application.dto.response.DishResponseDto;
 import com.pragma.powerup.application.handler.IDishHandler;
@@ -37,6 +38,22 @@ public class DishRestController {
     @PostMapping("/")
     public ResponseEntity<DishResponseDto> saveDish(@RequestBody DishRequestDto dishRequestDto) {
         return new ResponseEntity<>(dishHandler.saveDish(dishRequestDto), HttpStatus.CREATED);
+    }
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).OWNER.toString()" +
+            ")")
+    @Operation(summary = "Enable or disable a dish")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Dish updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = DishResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "No data found with entered dishId", content = @Content)
+    })
+    @PatchMapping("/{dishId}/isActive")
+    public ResponseEntity<DishResponseDto> updateDishIsActive(
+            @Schema(example = "1") @PathVariable(name = "dishId") Long dishId,
+            @RequestBody DishIsActiveRequestDto dishIsActiveRequestDto
+    ) {
+        return new ResponseEntity<>(dishHandler.updateDishIsActive(dishId ,dishIsActiveRequestDto), HttpStatus.CREATED);
     }
     @PreAuthorize("hasRole(" +
             "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).OWNER.toString()" +

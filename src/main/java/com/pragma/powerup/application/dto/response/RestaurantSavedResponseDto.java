@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RestaurantResponseDto {
+public class RestaurantSavedResponseDto {
     @Schema(example = "0")
     private Long id;
     @Schema(example = "Example Name")

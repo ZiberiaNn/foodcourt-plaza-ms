@@ -23,10 +23,14 @@ public class DishEntity {
     private Integer price;
     private String description;
     private String urlImage;
-    private String category;
     @Column(name = "is_active")
     private Boolean isActive;
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private RestaurantEntity restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryEntity category;
+
 }

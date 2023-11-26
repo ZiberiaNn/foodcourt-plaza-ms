@@ -7,6 +7,8 @@ import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -20,16 +22,14 @@ public class DishUseCase implements IDishServicePort {
     IUserPersistencePort userPersistencePort;
     @Override
     public DishModel saveDish(DishModel dishModel) {
-        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        checkLoggedUserOwnership(dishModel, loggedUser);
+        checkLoggedUserOwnershipOfRestaurant(dishModel);
         return dishPersistencePort.saveDish(dishModel);
     }
 
     @Override
-    public DishModel updateDishDescAndPrice(Long dishId, DishModel dishModel) {
-        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public DishModel partialUpdateDishModel(Long dishId, DishModel dishModel) {
         DishModel existingDishModel = dishPersistencePort.getDishById(dishId);
-        checkLoggedUserOwnership(existingDishModel, loggedUser);
+        checkLoggedUserOwnershipOfRestaurant(existingDishModel);
         return dishPersistencePort.partialUpdateDish(dishId, dishModel);
     }
 
@@ -37,9 +37,16 @@ public class DishUseCase implements IDishServicePort {
     public List<DishModel> getAllDishes() {
         return dishPersistencePort.getAllDishes();
     }
-    private void checkLoggedUserOwnership(DishModel dishModel, User loggedUser) {
+
+    @Override
+    public Page<DishModel> getDishesByRestaurantAndCategory(Long restaurantId, String category, Pageable pageable) {
+        return dishPersistencePort.getDishesByRestaurantAndCategory(restaurantId, category, pageable);
+    }
+
+    private void checkLoggedUserOwnershipOfRestaurant(DishModel restaurantDish) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserModel loggedUserModel = userPersistencePort.getUserByEmail(loggedUser.getUsername());
-        if(!Objects.equals(loggedUserModel.getIdentityDocument(), dishModel.getRestaurant().getOwnerUserIdentityNumber())){
+        if(!Objects.equals(loggedUserModel.getIdentityDocument(), restaurantDish.getRestaurant().getOwnerUserIdentityNumber())){
             throw new UserNotOwnerException();
         }
     }

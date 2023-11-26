@@ -19,7 +19,7 @@ public class UserFeignAdapter implements IUserPersistencePort {
     public UserModel getUserByIdentityNumber(Integer identityNumber) {
         UserResponse userResponse = userFeignClient.getUserByIdentityNumber(identityNumber);
         if (Objects.isNull(userResponse)) {
-            throw new NoDataFoundException();
+            throw new NoDataFoundException("No user found with identity number: " + identityNumber);
         }
         return userEntityMapper.toModel(userResponse);
     }
@@ -28,7 +28,7 @@ public class UserFeignAdapter implements IUserPersistencePort {
     public UserModel getUserByEmail(String email) {
         UserResponse userResponse = userFeignClient.getUserByEmail(email);
         if (Objects.isNull(userResponse)) {
-            throw new NoDataFoundException();
+            throw new NoDataFoundException("No user found with email: " + email);
         }
         return userEntityMapper.toModel(userResponse);
     }
