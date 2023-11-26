@@ -128,8 +128,38 @@ CREATE TABLE `order_table` (
 
 LOCK TABLES `order_table` WRITE;
 /*!40000 ALTER TABLE `order_table` DISABLE KEYS */;
-INSERT INTO `order_table` VALUES (17,'LISTO',12,321),(18,'PENDIENTE',12,321),(19,'PENDIENTE',12,321);
+INSERT INTO `order_table` VALUES (17,'LISTO',12,321),(18,'PENDIENTE',11,321),(19,'PENDIENTE',12,321);
 /*!40000 ALTER TABLE `order_table` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `restaurant_employee_table`
+--
+
+DROP TABLE IF EXISTS `restaurant_employee_table`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `restaurant_employee_table` (
+  `employee_id` bigint NOT NULL AUTO_INCREMENT,
+  `identity_number` int NOT NULL,
+  `restaurant_id` bigint NOT NULL,
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`employee_id`),
+  UNIQUE KEY `UK_3r9x7p7dfmffwc3ct1qnu0h9q` (`identity_number`),
+  UNIQUE KEY `UK_5epbd3nr2e6tpvwu1sf5au9fs` (`email`),
+  KEY `FK8069mv0bmmxxpmw9jbl0d5clu` (`restaurant_id`),
+  CONSTRAINT `FK8069mv0bmmxxpmw9jbl0d5clu` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant_table` (`restaurant_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `restaurant_employee_table`
+--
+
+LOCK TABLES `restaurant_employee_table` WRITE;
+/*!40000 ALTER TABLE `restaurant_employee_table` DISABLE KEYS */;
+INSERT INTO `restaurant_employee_table` VALUES (1,555,12,'employee@employee.com');
+/*!40000 ALTER TABLE `restaurant_employee_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -170,4 +200,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-25 19:21:15
+-- Dump completed on 2023-11-25 22:48:02
