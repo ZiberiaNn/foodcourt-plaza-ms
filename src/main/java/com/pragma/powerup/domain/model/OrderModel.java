@@ -14,6 +14,7 @@ import java.util.List;
 public class OrderModel {
     private Long id;
     private Integer clientIdentityNumber;
+    private RestaurantEmployeeModel assignedEmployee;
     private RestaurantModel restaurant;
     private StatusEnum status;
     private List<OrderDishQtyEntity> dishQtyList;

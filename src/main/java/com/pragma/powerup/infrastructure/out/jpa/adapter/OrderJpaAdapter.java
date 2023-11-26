@@ -65,4 +65,13 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
         }
         return entityPage.map(orderEntityMapper::toModel);
     }
+
+    @Override
+    public OrderModel updateOrder(OrderModel orderModel) {
+        if(orderRepository.findById(orderModel.getId()).isEmpty()){
+            throw new NoDataFoundException("No order found with id: " + orderModel.getId());
+        }
+        OrderEntity savedOrderEntity = orderRepository.save(orderEntityMapper.toEntity(orderModel));
+        return orderEntityMapper.toModel(savedOrderEntity);
+    }
 }
