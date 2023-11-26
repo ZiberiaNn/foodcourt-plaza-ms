@@ -116,8 +116,11 @@ CREATE TABLE `order_table` (
   `status` varchar(50) NOT NULL,
   `restaurant_id` bigint NOT NULL,
   `client_identity_number` int NOT NULL,
+  `restaurant_employee_id` bigint DEFAULT NULL,
   PRIMARY KEY (`order_id`),
   KEY `FKew3veuv1ycpu22fvcouiia34g` (`restaurant_id`),
+  KEY `FKe40wn0jopaosi7o8l8wg4agi7` (`restaurant_employee_id`),
+  CONSTRAINT `FKe40wn0jopaosi7o8l8wg4agi7` FOREIGN KEY (`restaurant_employee_id`) REFERENCES `restaurant_employee_table` (`employee_id`),
   CONSTRAINT `FKew3veuv1ycpu22fvcouiia34g` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant_table` (`restaurant_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -128,7 +131,7 @@ CREATE TABLE `order_table` (
 
 LOCK TABLES `order_table` WRITE;
 /*!40000 ALTER TABLE `order_table` DISABLE KEYS */;
-INSERT INTO `order_table` VALUES (17,'LISTO',12,321),(18,'PENDIENTE',11,321),(19,'PENDIENTE',12,321);
+INSERT INTO `order_table` VALUES (17,'EN_PREPARACION',12,321,3),(18,'PENDIENTE',11,321,NULL),(19,'EN_PREPARACION',12,321,1);
 /*!40000 ALTER TABLE `order_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,15 +144,13 @@ DROP TABLE IF EXISTS `restaurant_employee_table`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `restaurant_employee_table` (
   `employee_id` bigint NOT NULL AUTO_INCREMENT,
-  `identity_number` int NOT NULL,
   `restaurant_id` bigint NOT NULL,
   `email` varchar(255) NOT NULL,
   PRIMARY KEY (`employee_id`),
-  UNIQUE KEY `UK_3r9x7p7dfmffwc3ct1qnu0h9q` (`identity_number`),
   UNIQUE KEY `UK_5epbd3nr2e6tpvwu1sf5au9fs` (`email`),
   KEY `FK8069mv0bmmxxpmw9jbl0d5clu` (`restaurant_id`),
   CONSTRAINT `FK8069mv0bmmxxpmw9jbl0d5clu` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant_table` (`restaurant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +159,7 @@ CREATE TABLE `restaurant_employee_table` (
 
 LOCK TABLES `restaurant_employee_table` WRITE;
 /*!40000 ALTER TABLE `restaurant_employee_table` DISABLE KEYS */;
-INSERT INTO `restaurant_employee_table` VALUES (1,555,12,'employee@employee.com');
+INSERT INTO `restaurant_employee_table` VALUES (1,12,'employee@employee.com'),(3,12,'employee2@employee.com');
 /*!40000 ALTER TABLE `restaurant_employee_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,4 +201,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-25 22:48:02
+-- Dump completed on 2023-11-25 23:49:25
