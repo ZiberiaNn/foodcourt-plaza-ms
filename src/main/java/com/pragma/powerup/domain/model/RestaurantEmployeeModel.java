@@ -10,7 +10,6 @@ import lombok.*;
 @Builder(toBuilder = true)
 public class RestaurantEmployeeModel {
     private Long id;
-    private Integer identityNumber;
     private String email;
     private RestaurantEntity restaurant;
 }

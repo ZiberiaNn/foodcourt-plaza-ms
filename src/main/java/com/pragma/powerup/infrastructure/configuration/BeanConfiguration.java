@@ -1,14 +1,8 @@
 package com.pragma.powerup.infrastructure.configuration;
 
-import com.pragma.powerup.domain.api.ICategoryServicePort;
-import com.pragma.powerup.domain.api.IDishServicePort;
-import com.pragma.powerup.domain.api.IOrderServicePort;
-import com.pragma.powerup.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.domain.api.*;
 import com.pragma.powerup.domain.spi.*;
-import com.pragma.powerup.domain.usecase.CategoryUseCase;
-import com.pragma.powerup.domain.usecase.DishUseCase;
-import com.pragma.powerup.domain.usecase.OrderUseCase;
-import com.pragma.powerup.domain.usecase.RestaurantUseCase;
+import com.pragma.powerup.domain.usecase.*;
 import com.pragma.powerup.infrastructure.out.feign.adapter.UserFeignAdapter;
 import com.pragma.powerup.infrastructure.out.feign.client.IUserFeignClient;
 import com.pragma.powerup.infrastructure.out.feign.mapper.IUserResponseMapper;
@@ -88,5 +82,10 @@ public class BeanConfiguration {
     @Bean
     public IRestaurantEmployeePersistencePort restaurantEmployeePersistencePort() {
         return new RestaurantEmployeeJpaAdapter(restaurantEmployeeRepository, restaurantEmployeeEntityMapper);
+    }
+
+    @Bean
+    public IRestaurantEmployeeServicePort restaurantEmployeeServicePort() {
+        return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort(), userPersistencePort());
     }
 }

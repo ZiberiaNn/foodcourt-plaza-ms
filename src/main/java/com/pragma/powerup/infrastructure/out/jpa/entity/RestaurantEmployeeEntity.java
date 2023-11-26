@@ -14,8 +14,6 @@ public class RestaurantEmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id", nullable = false)
     private Long id;
-    @Column(name = "identity_number", nullable = false, unique = true)
-    private Integer identityNumber;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @ManyToOne(fetch = FetchType.EAGER)
