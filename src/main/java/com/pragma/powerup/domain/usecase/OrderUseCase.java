@@ -9,6 +9,8 @@ import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
@@ -58,5 +60,9 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public List<OrderModel> getAllOrders() {
         return orderPersistencePort.getAllOrders();
+    }
+    @Override
+    public Page<OrderModel> getOrdersByStatus(String status, Pageable pageable) {
+        return orderPersistencePort.getOrdersByStatus(status, pageable);
     }
 }

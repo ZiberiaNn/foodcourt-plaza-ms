@@ -9,6 +9,8 @@ import com.pragma.powerup.infrastructure.out.jpa.mapper.IOrderEntityMapper;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IOrderDishQtyRepository;
 import com.pragma.powerup.infrastructure.out.jpa.repository.IOrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,5 +56,13 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
             throw new NoDataFoundException("No orders found");
         }
         return orderEntityMapper.toModelList(orderEntityList);
+    }
+    @Override
+    public Page<OrderModel> getOrdersByStatus(String status, Pageable pageable) {
+        Page<OrderEntity> entityPage = orderRepository.findByStatusIgnoreCase(status, pageable);
+        if (entityPage.isEmpty()) {
+            throw new NoDataFoundException("No orders found");
+        }
+        return entityPage.map(orderEntityMapper::toModel);
     }
 }
