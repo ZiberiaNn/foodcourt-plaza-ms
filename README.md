@@ -31,13 +31,13 @@ To get a local copy up and running follow these steps.
 
 ### Installation
 
-1. Clone https://github.com/ZiberiaNn/foodcourt-users-ms repo and follow its instructions
+1. Clone https://github.com/ZiberiaNn/foodcourt-users-ms repo, follow its instructions and run the microservice
 2. Clone this repo
 3. Change directory
    ```sh
    cd power-up-arquetipo
    ```
-4. Create a new database in MySQL called foodcourt_plaza
+4. Create a new database in MySQL using the script src/main/resources/init_foodcourt_plaza_db.sql
 5. Update the database connection settings 
    ```yml
    # src/main/resources/application.yml   

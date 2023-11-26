@@ -7,7 +7,10 @@ import com.pragma.powerup.application.mapper.IOrderRequestMapper;
 import com.pragma.powerup.application.mapper.IOrderResponseMapper;
 import com.pragma.powerup.domain.api.IOrderServicePort;
 import com.pragma.powerup.domain.model.OrderModel;
+import com.pragma.powerup.domain.model.enums.StatusEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +39,10 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public List<OrderResponseDto> getAllOrders() {
         return orderResponseMapper.toResponseList(orderServicePort.getAllOrders());
+    }
+    @Override
+    public Page<OrderResponseDto> getOrdersByStatus(StatusEnum status, int page, int size) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        return orderServicePort.getOrdersByStatus(status.getName(), pageable).map(orderResponseMapper::toResponse);
     }
 }
