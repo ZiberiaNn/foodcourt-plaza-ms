@@ -11,6 +11,8 @@ import com.pragma.powerup.domain.model.enums.StatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +29,9 @@ public class OrderHandler implements IOrderHandler {
 
     @Override
     public OrderResponseDto saveOrder(OrderRequestDto orderRequestDto) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         OrderModel orderModel = orderRequestMapper.toModel(orderRequestDto);
-        return orderResponseMapper.toResponse(orderServicePort.createOrder(orderModel));
+        return orderResponseMapper.toResponse(orderServicePort.createOrder(orderModel, loggedUser.getUsername()));
     }
 
     @Override
@@ -41,8 +44,9 @@ public class OrderHandler implements IOrderHandler {
         return orderResponseMapper.toResponseList(orderServicePort.getAllOrders());
     }
     @Override
-    public Page<OrderResponseDto> getOrdersByStatus(StatusEnum status, int page, int size) {
+    public Page<OrderResponseDto> getOrdersByStatusAndIfEmployeeBelongsToOrder(StatusEnum status, int page, int size) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = Pageable.ofSize(size).withPage(page);
-        return orderServicePort.getOrdersByStatus(status.getName(), pageable).map(orderResponseMapper::toResponse);
+        return orderServicePort.getOrdersByStatusAndIfEmployeeBelongsToOrder(status.getName(), pageable, loggedUser.getUsername()).map(orderResponseMapper::toResponse);
     }
 }

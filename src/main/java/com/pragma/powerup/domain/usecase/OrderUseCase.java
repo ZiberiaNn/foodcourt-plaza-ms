@@ -3,31 +3,34 @@ package com.pragma.powerup.domain.usecase;
 import com.pragma.powerup.domain.api.IOrderServicePort;
 import com.pragma.powerup.domain.exception.DomainException;
 import com.pragma.powerup.domain.model.OrderModel;
+import com.pragma.powerup.domain.model.RestaurantEmployeeModel;
 import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.domain.model.enums.StatusEnum;
 import com.pragma.powerup.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.domain.spi.IOrderPersistencePort;
+import com.pragma.powerup.domain.spi.IRestaurantEmployeePersistencePort;
 import com.pragma.powerup.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
     private final IDishPersistencePort dishPersistencePort;
     private final IUserPersistencePort userPersistencePort;
+    private final IRestaurantEmployeePersistencePort restaurantEmployeePersistencePort;
 
     @Override
-    public OrderModel createOrder(OrderModel orderModel) {
+    public OrderModel createOrder(OrderModel orderModel, String loggedUserEmail) {
         checkIfDishesBelongsToRestaurant(orderModel);
-        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserModel client = userPersistencePort.getUserByEmail(loggedUser.getUsername());
+        UserModel client = userPersistencePort.getUserByEmail(loggedUserEmail);
         checkIfClientHasOrdersInProcess(client);
         orderModel.setStatus(StatusEnum.PENDIENTE);
         orderModel.setClientIdentityNumber(client.getIdentityDocument());
@@ -62,7 +65,14 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.getAllOrders();
     }
     @Override
-    public Page<OrderModel> getOrdersByStatus(String status, Pageable pageable) {
-        return orderPersistencePort.getOrdersByStatus(status, pageable);
+    public Page<OrderModel> getOrdersByStatusAndIfEmployeeBelongsToOrder(String status, Pageable pageable, String loggedUserEmail) {
+        RestaurantEmployeeModel restaurantEmployee = restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail);
+        Page<OrderModel> fullOrderPage = orderPersistencePort.getOrdersByStatus(status, pageable);
+        Page<OrderModel> filteredOrderPage = new PageImpl<>(fullOrderPage.stream().filter(order -> Objects.equals(order.getRestaurant().getId(), restaurantEmployee.getRestaurant().getId()))
+                .collect(Collectors.toList()), fullOrderPage.getPageable(), fullOrderPage.getTotalElements());
+        if (filteredOrderPage.isEmpty()) {
+            throw new DomainException("The orders found are not from the employee's restaurant");
+        }
+        return filteredOrderPage;
     }
 }
