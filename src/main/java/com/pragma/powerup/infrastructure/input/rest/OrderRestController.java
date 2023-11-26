@@ -62,9 +62,9 @@ public class OrderRestController {
         return ResponseEntity.ok(orderHandler.getOrderById(id));
     }
 
-    @Operation(summary = "Get all orders filtered by status")
+    @Operation(summary = "Get all orders filtered by status and if the logged employee belongs to the order")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Orders filtered by status returned",
+            @ApiResponse(responseCode = "200", description = "Return orders filtered by status and if the logged employee belongs to the order",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
@@ -72,11 +72,11 @@ public class OrderRestController {
             "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).EMPLOYEE.toString()" +
             ")")
     @GetMapping("/by-status/{status}")
-    public ResponseEntity<Page<OrderResponseDto>> getOrdersByStatus(
+    public ResponseEntity<Page<OrderResponseDto>> getOrdersByStatusAndIfEmployeeBelongsToOrder(
             @PathVariable(name = "status") StatusEnum status,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size
     ) {
-        return ResponseEntity.ok(orderHandler.getOrdersByStatus(status, page, size));
+        return ResponseEntity.ok(orderHandler.getOrdersByStatusAndIfEmployeeBelongsToOrder(status, page, size));
     }
 }

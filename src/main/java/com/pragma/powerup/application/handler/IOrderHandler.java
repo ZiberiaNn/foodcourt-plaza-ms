@@ -11,5 +11,5 @@ public interface IOrderHandler {
     OrderResponseDto saveOrder(OrderRequestDto orderRequestDto);
     OrderResponseDto getOrderById(Long id);
     List<OrderResponseDto> getAllOrders();
-    Page<OrderResponseDto> getOrdersByStatus(StatusEnum status, int page, int size);
+    Page<OrderResponseDto> getOrdersByStatusAndIfEmployeeBelongsToOrder(StatusEnum status, int page, int size);
 }
