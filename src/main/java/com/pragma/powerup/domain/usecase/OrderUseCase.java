@@ -83,7 +83,7 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.updateOrder(orderModel);
     }
     @Override
-    public OrderModel updateOrderStatusToDelivered(Long existingOrderId, String pin, String authToken, String loggedUserEmail) {
+    public OrderModel updateOrderStatusToDelivered(Long existingOrderId, String pin, String loggedUserEmail) {
         OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
         checkIfOrderBelongsToEmployeeRestaurant(orderModel, restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail));
         checkIfOrderIsNotDelivered(orderModel);

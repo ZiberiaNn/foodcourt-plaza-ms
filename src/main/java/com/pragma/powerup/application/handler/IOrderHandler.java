@@ -17,5 +17,5 @@ public interface IOrderHandler {
     OrderResponseDto updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId);
     OrderResponseDto updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken);
 
-    OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pin, String authToken);
+    OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pin);
 }
