@@ -65,4 +65,11 @@ public class OrderHandler implements IOrderHandler {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToDelivered(existingOrderId, pinRequestDto.getPin(), loggedUser.getUsername()));
     }
+
+    @Override
+    public OrderResponseDto updateOrderStatusToCancelled(Long existingOrderId) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToCancelled(existingOrderId, loggedUser.getUsername()));
+
+    }
 }
