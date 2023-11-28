@@ -6,7 +6,9 @@ import lombok.Getter;
 public enum StatusEnum {
     PENDIENTE("PENDIENTE"),
     EN_PREPARACION("EN_PREPARACION"),
-    LISTO("LISTO");
+    LISTO("LISTO"),
+    ENTREGADO("ENTREGADO"),
+    CANCELADO("CANCELADO");
     private final String name;
     StatusEnum(String name) {
         this.name = name;

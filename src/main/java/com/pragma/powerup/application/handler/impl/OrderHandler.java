@@ -1,6 +1,7 @@
 package com.pragma.powerup.application.handler.impl;
 
 import com.pragma.powerup.application.dto.request.OrderRequestDto;
+import com.pragma.powerup.application.dto.request.PinRequestDto;
 import com.pragma.powerup.application.dto.response.OrderResponseDto;
 import com.pragma.powerup.application.handler.IOrderHandler;
 import com.pragma.powerup.application.mapper.IOrderRequestMapper;
@@ -57,5 +58,11 @@ public class OrderHandler implements IOrderHandler {
     public OrderResponseDto updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken) {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToDoneAndSendSms(existingOrderId, authToken, loggedUser.getUsername()));
+    }
+
+    @Override
+    public OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pinRequestDto, String authToken) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToDelivered(existingOrderId, pinRequestDto.getPin(),authToken, loggedUser.getUsername()));
     }
 }

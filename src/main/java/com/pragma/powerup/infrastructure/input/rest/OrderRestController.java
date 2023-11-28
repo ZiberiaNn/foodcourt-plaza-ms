@@ -1,6 +1,7 @@
 package com.pragma.powerup.infrastructure.input.rest;
 
 import com.pragma.powerup.application.dto.request.OrderRequestDto;
+import com.pragma.powerup.application.dto.request.PinRequestDto;
 import com.pragma.powerup.application.dto.response.OrderResponseDto;
 import com.pragma.powerup.application.handler.IOrderHandler;
 import com.pragma.powerup.domain.model.enums.StatusEnum;
@@ -91,7 +92,7 @@ public class OrderRestController {
     @PreAuthorize("hasRole(" +
             "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).EMPLOYEE.toString()" +
             ")")
-    @PatchMapping("/employee-and-status/{existingOrderId}")
+    @PatchMapping("/status-preparing/{existingOrderId}")
     public ResponseEntity<OrderResponseDto> updateOrderAssignedEmployeeAndStatusToEnPreparacion(@PathVariable Long existingOrderId) {
         return new ResponseEntity<>(orderHandler.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId), HttpStatus.CREATED);
     }
@@ -109,5 +110,21 @@ public class OrderRestController {
     public ResponseEntity<OrderResponseDto> updateOrderStatusToDoneAndSendSms(@PathVariable Long existingOrderId,
                                                                               @Parameter(hidden = true) @RequestHeader (name="Authorization") String authToken) {
         return new ResponseEntity<>(orderHandler.updateOrderStatusToDoneAndSendSms(existingOrderId, authToken), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update an existing status to 'ENTREGADO'")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).EMPLOYEE.toString()" +
+            ")")
+    @PatchMapping("/status-delivered/{existingOrderId}")
+    public ResponseEntity<OrderResponseDto> updateOrderStatusToDelivered(@PathVariable Long existingOrderId,
+                                                                         @RequestBody PinRequestDto pinRequestDto,
+                                                                         @Parameter(hidden = true) @RequestHeader (name="Authorization") String authToken) {
+        return new ResponseEntity<>(orderHandler.updateOrderStatusToDelivered(existingOrderId, pinRequestDto,authToken), HttpStatus.CREATED);
     }
 }
