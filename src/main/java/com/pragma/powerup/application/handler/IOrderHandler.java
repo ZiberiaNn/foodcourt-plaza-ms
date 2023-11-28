@@ -14,4 +14,6 @@ public interface IOrderHandler {
     Page<OrderResponseDto> getOrdersByStatusAndIfEmployeeBelongsToOrder(StatusEnum status, int page, int size);
 
     OrderResponseDto updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId);
+    OrderResponseDto updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken);
+
 }
