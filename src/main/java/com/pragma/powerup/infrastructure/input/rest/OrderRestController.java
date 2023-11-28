@@ -123,8 +123,8 @@ public class OrderRestController {
             ")")
     @PatchMapping("/status-delivered/{existingOrderId}")
     public ResponseEntity<OrderResponseDto> updateOrderStatusToDelivered(@PathVariable Long existingOrderId,
-                                                                         @RequestBody PinRequestDto pinRequestDto,
-                                                                         @Parameter(hidden = true) @RequestHeader (name="Authorization") String authToken) {
-        return new ResponseEntity<>(orderHandler.updateOrderStatusToDelivered(existingOrderId, pinRequestDto,authToken), HttpStatus.CREATED);
+                                                                         @RequestBody PinRequestDto pinRequestDto) {
+        return new ResponseEntity<>(orderHandler.updateOrderStatusToDelivered(existingOrderId, pinRequestDto), HttpStatus.CREATED);
     }
+
 }

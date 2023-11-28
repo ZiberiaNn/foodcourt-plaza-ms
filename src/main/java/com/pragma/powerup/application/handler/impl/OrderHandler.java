@@ -61,8 +61,8 @@ public class OrderHandler implements IOrderHandler {
     }
 
     @Override
-    public OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pinRequestDto, String authToken) {
+    public OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pinRequestDto) {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToDelivered(existingOrderId, pinRequestDto.getPin(),authToken, loggedUser.getUsername()));
+        return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToDelivered(existingOrderId, pinRequestDto.getPin(), loggedUser.getUsername()));
     }
 }
