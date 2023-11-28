@@ -4,7 +4,6 @@ import com.pragma.powerup.application.dto.request.OrderRequestDto;
 import com.pragma.powerup.application.dto.response.OrderResponseDto;
 import com.pragma.powerup.application.handler.IOrderHandler;
 import com.pragma.powerup.domain.model.enums.StatusEnum;
-import com.pragma.powerup.infrastructure.out.feign.client.ISmsFeignClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,7 +25,6 @@ import java.util.List;
 public class OrderRestController {
 
     private final IOrderHandler orderHandler;
-    private final ISmsFeignClient smsFeignClient;
 
     @Operation(summary = "Add a new order")
     @ApiResponses(value = {
@@ -98,7 +96,7 @@ public class OrderRestController {
         return new ResponseEntity<>(orderHandler.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update an existing order assigned employee and status to 'En preparacion'")
+    @Operation(summary = "Update an existing status to 'LISTO' and send SMS to client")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order updated",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
