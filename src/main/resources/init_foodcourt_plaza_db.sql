@@ -100,7 +100,7 @@ CREATE TABLE `order_dish_qty_table` (
 
 LOCK TABLES `order_dish_qty_table` WRITE;
 /*!40000 ALTER TABLE `order_dish_qty_table` DISABLE KEYS */;
-INSERT INTO `order_dish_qty_table` VALUES (1,18,5),(1,19,5),(2,17,5);
+INSERT INTO `order_dish_qty_table` VALUES (1,18,5),(1,19,5),(1,20,5),(2,17,5);
 /*!40000 ALTER TABLE `order_dish_qty_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,12 +117,13 @@ CREATE TABLE `order_table` (
   `restaurant_id` bigint NOT NULL,
   `client_identity_number` int NOT NULL,
   `restaurant_employee_id` bigint DEFAULT NULL,
+  `pin` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`order_id`),
   KEY `FKew3veuv1ycpu22fvcouiia34g` (`restaurant_id`),
   KEY `FKe40wn0jopaosi7o8l8wg4agi7` (`restaurant_employee_id`),
   CONSTRAINT `FKe40wn0jopaosi7o8l8wg4agi7` FOREIGN KEY (`restaurant_employee_id`) REFERENCES `restaurant_employee_table` (`employee_id`),
   CONSTRAINT `FKew3veuv1ycpu22fvcouiia34g` FOREIGN KEY (`restaurant_id`) REFERENCES `restaurant_table` (`restaurant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +132,7 @@ CREATE TABLE `order_table` (
 
 LOCK TABLES `order_table` WRITE;
 /*!40000 ALTER TABLE `order_table` DISABLE KEYS */;
-INSERT INTO `order_table` VALUES (17,'EN_PREPARACION',12,321,3),(18,'PENDIENTE',11,321,NULL),(19,'EN_PREPARACION',12,321,1);
+INSERT INTO `order_table` VALUES (17,'LISTO',12,321,3,'AScs'),(18,'LISTO',11,321,NULL,'RghF'),(19,'LISTO',12,321,1,'HdhS'),(20,'LISTO',12,321,NULL,'eKdG');
 /*!40000 ALTER TABLE `order_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,4 +202,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-25 23:49:25
+-- Dump completed on 2023-11-28 14:04:01

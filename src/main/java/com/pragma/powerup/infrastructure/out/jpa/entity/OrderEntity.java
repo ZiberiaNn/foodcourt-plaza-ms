@@ -26,7 +26,10 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private RestaurantEntity restaurant;
+    @Column(name = "status", length = 50)
     private String status;
+    @Column(name = "pin", length = 5)
+    private String pin;
     @OneToMany(mappedBy = "order")
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     List<OrderDishQtyEntity> dishQtyList;

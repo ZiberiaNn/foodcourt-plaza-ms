@@ -17,5 +17,6 @@ public class OrderModel {
     private RestaurantEmployeeModel assignedEmployee;
     private RestaurantModel restaurant;
     private StatusEnum status;
+    private String pin;
     private List<OrderDishQtyEntity> dishQtyList;
 }
