@@ -3,7 +3,9 @@ package com.pragma.powerup.infrastructure.configuration;
 import com.pragma.powerup.domain.api.*;
 import com.pragma.powerup.domain.spi.*;
 import com.pragma.powerup.domain.usecase.*;
+import com.pragma.powerup.infrastructure.out.feign.adapter.SmsFeignAdapter;
 import com.pragma.powerup.infrastructure.out.feign.adapter.UserFeignAdapter;
+import com.pragma.powerup.infrastructure.out.feign.client.ISmsFeignClient;
 import com.pragma.powerup.infrastructure.out.feign.client.IUserFeignClient;
 import com.pragma.powerup.infrastructure.out.feign.mapper.IUserResponseMapper;
 import com.pragma.powerup.infrastructure.out.jpa.adapter.*;
@@ -35,6 +37,10 @@ public class BeanConfiguration {
 
     private final IRestaurantEmployeeRepository restaurantEmployeeRepository;
     private final IRestaurantEmployeeEntityMapper restaurantEmployeeEntityMapper;
+
+    private final ISmsFeignClient smsFeignClient;
+
+
     @Bean
     public IUserPersistencePort userPersistencePort() {
         return new UserFeignAdapter(userFeignClient, userEntityMapper);
@@ -76,7 +82,7 @@ public class BeanConfiguration {
     }
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(orderPersistencePort(), dishPersistencePort(), userPersistencePort(), restaurantEmployeePersistencePort());
+        return new OrderUseCase(orderPersistencePort(), dishPersistencePort(), userPersistencePort(), restaurantEmployeePersistencePort(), smsPersistencePort());
     }
 
     @Bean
@@ -87,5 +93,10 @@ public class BeanConfiguration {
     @Bean
     public IRestaurantEmployeeServicePort restaurantEmployeeServicePort() {
         return new RestaurantEmployeeUseCase(restaurantEmployeePersistencePort(), userPersistencePort());
+    }
+
+    @Bean
+    public ISmsPersistencePort smsPersistencePort() {
+        return new SmsFeignAdapter(smsFeignClient);
     }
 }

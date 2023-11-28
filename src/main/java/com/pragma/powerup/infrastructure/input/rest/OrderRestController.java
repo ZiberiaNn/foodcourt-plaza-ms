@@ -5,6 +5,7 @@ import com.pragma.powerup.application.dto.response.OrderResponseDto;
 import com.pragma.powerup.application.handler.IOrderHandler;
 import com.pragma.powerup.domain.model.enums.StatusEnum;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,6 +25,7 @@ import java.util.List;
 public class OrderRestController {
 
     private final IOrderHandler orderHandler;
+
     @Operation(summary = "Add a new order")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order created",
@@ -92,5 +94,20 @@ public class OrderRestController {
     @PatchMapping("/employee-and-status/{existingOrderId}")
     public ResponseEntity<OrderResponseDto> updateOrderAssignedEmployeeAndStatusToEnPreparacion(@PathVariable Long existingOrderId) {
         return new ResponseEntity<>(orderHandler.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update an existing status to 'LISTO' and send SMS to client")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).EMPLOYEE.toString()" +
+            ")")
+    @PatchMapping("/status-done/{existingOrderId}")
+    public ResponseEntity<OrderResponseDto> updateOrderStatusToDoneAndSendSms(@PathVariable Long existingOrderId,
+                                                                              @Parameter(hidden = true) @RequestHeader (name="Authorization") String authToken) {
+        return new ResponseEntity<>(orderHandler.updateOrderStatusToDoneAndSendSms(existingOrderId, authToken), HttpStatus.CREATED);
     }
 }

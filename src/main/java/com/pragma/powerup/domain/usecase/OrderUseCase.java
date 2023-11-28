@@ -6,11 +6,10 @@ import com.pragma.powerup.domain.model.OrderModel;
 import com.pragma.powerup.domain.model.RestaurantEmployeeModel;
 import com.pragma.powerup.domain.model.auth.UserModel;
 import com.pragma.powerup.domain.model.enums.StatusEnum;
-import com.pragma.powerup.domain.spi.IDishPersistencePort;
-import com.pragma.powerup.domain.spi.IOrderPersistencePort;
-import com.pragma.powerup.domain.spi.IRestaurantEmployeePersistencePort;
-import com.pragma.powerup.domain.spi.IUserPersistencePort;
+import com.pragma.powerup.domain.spi.*;
+import com.pragma.powerup.infrastructure.out.feign.request.SmsRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +25,8 @@ public class OrderUseCase implements IOrderServicePort {
     private final IDishPersistencePort dishPersistencePort;
     private final IUserPersistencePort userPersistencePort;
     private final IRestaurantEmployeePersistencePort restaurantEmployeePersistencePort;
+    private final ISmsPersistencePort smsPersistencePort;
+    private static final int PIN_LENGTH=4;
 
     @Override
     public OrderModel createOrder(OrderModel orderModel, String loggedUserEmail) {
@@ -34,6 +35,7 @@ public class OrderUseCase implements IOrderServicePort {
         checkIfClientHasOrdersInProcess(client);
         orderModel.setStatus(StatusEnum.PENDIENTE);
         orderModel.setClientIdentityNumber(client.getIdentityDocument());
+        orderModel.setPin(RandomStringUtils.randomAlphabetic(PIN_LENGTH));
         return orderPersistencePort.saveOrder(orderModel);
     }
 
@@ -84,6 +86,23 @@ public class OrderUseCase implements IOrderServicePort {
         }
         orderModel.setStatus(StatusEnum.EN_PREPARACION);
         orderModel.setAssignedEmployee(restaurantEmployee);
+        return orderPersistencePort.updateOrder(orderModel);
+    }
+
+    @Override
+    public OrderModel updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken, String loggedUserEmail) {
+        OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
+        if(!Objects.equals(orderModel.getRestaurant().getId(), restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail).getRestaurant().getId())){
+            throw new DomainException("The order does not belong to the employee's restaurant");
+        }
+        orderModel.setStatus(StatusEnum.LISTO);
+        UserModel client = userPersistencePort.getUserByIdentityNumber(orderModel.getClientIdentityNumber());
+        smsPersistencePort.sendSms(
+                new SmsRequest(
+                        "¡Hola, "+client.getName()+"! Te informamos que tu pedido #"+ existingOrderId +" esta listo. Reclamalo con el pin: "+orderModel.getPin(),
+                        client.getPhone()),
+                authToken
+        );
         return orderPersistencePort.updateOrder(orderModel);
     }
 }

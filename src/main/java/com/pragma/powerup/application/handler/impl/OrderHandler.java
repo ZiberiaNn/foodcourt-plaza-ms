@@ -52,4 +52,10 @@ public class OrderHandler implements IOrderHandler {
         User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return orderResponseMapper.toResponse(orderServicePort.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId, loggedUser.getUsername()));
     }
+
+    @Override
+    public OrderResponseDto updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken) {
+        User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return orderResponseMapper.toResponse(orderServicePort.updateOrderStatusToDoneAndSendSms(existingOrderId, authToken, loggedUser.getUsername()));
+    }
 }
