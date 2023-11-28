@@ -14,4 +14,6 @@ public interface IOrderServicePort {
 
     OrderModel updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId, String loggedUserEmail);
     OrderModel updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken, String loggedUserEmail);
+
+    OrderModel updateOrderStatusToDelivered(Long existingOrderId, String pin, String authToken, String loggedUserEmail);
 }

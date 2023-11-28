@@ -1,6 +1,7 @@
 package com.pragma.powerup.application.handler;
 
 import com.pragma.powerup.application.dto.request.OrderRequestDto;
+import com.pragma.powerup.application.dto.request.PinRequestDto;
 import com.pragma.powerup.application.dto.response.OrderResponseDto;
 import com.pragma.powerup.domain.model.enums.StatusEnum;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,5 @@ public interface IOrderHandler {
     OrderResponseDto updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId);
     OrderResponseDto updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken);
 
+    OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pin, String authToken);
 }

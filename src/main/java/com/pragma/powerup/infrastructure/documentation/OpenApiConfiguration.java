@@ -22,7 +22,7 @@ public class OpenApiConfiguration {
                 .components(new Components().addSecuritySchemes
                         ("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info()
-                        .title("Hexagonal Power-up API")
+                        .title("FoodCourt Plaza Microservice API\n")
                         .version(appVersion)
                         .description(appDescription)
                         .termsOfService("http://swagger.io/terms/")

@@ -38,26 +38,6 @@ public class OrderUseCase implements IOrderServicePort {
         orderModel.setPin(RandomStringUtils.randomAlphabetic(PIN_LENGTH));
         return orderPersistencePort.saveOrder(orderModel);
     }
-
-    private void checkIfDishesBelongsToRestaurant(OrderModel orderModel) {
-        orderModel.getDishQtyList().forEach(orderDishQtyEntity -> {
-            if(!Objects.equals(
-                    dishPersistencePort.getDishById(orderDishQtyEntity.getDish().getId()).getRestaurant().getId(),
-                    orderModel.getRestaurant().getId())
-            ){
-                throw new DomainException("At least one dish does not belong to restaurant");
-            }
-        });
-    }
-    private void checkIfClientHasOrdersInProcess(UserModel client) {
-        orderPersistencePort.getOrderByClientIdentityNumber(client.getIdentityDocument()).forEach(clientOrder -> {
-            if(clientOrder.getStatus().getName().equalsIgnoreCase(StatusEnum.EN_PREPARACION.getName())||
-                    clientOrder.getStatus().getName().equalsIgnoreCase(StatusEnum.PENDIENTE.getName())){
-                throw new DomainException("Client has an order in process");
-            }
-        });
-    }
-
     @Override
     public OrderModel getOrderById(Long id) {
         return orderPersistencePort.getOrderById(id);
@@ -81,9 +61,8 @@ public class OrderUseCase implements IOrderServicePort {
     public OrderModel updateOrderAssignedEmployeeAndStatusToEnPreparacion(Long existingOrderId, String loggedUserEmail) {
         OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
         RestaurantEmployeeModel restaurantEmployee = restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail);
-        if(!Objects.equals(orderModel.getRestaurant().getId(), restaurantEmployee.getRestaurant().getId())){
-            throw new DomainException("The order does not belong to the employee's restaurant");
-        }
+        checkIfOrderBelongsToEmployeeRestaurant(orderModel, restaurantEmployee);
+        checkIfOrderIsNotDelivered(orderModel);
         orderModel.setStatus(StatusEnum.EN_PREPARACION);
         orderModel.setAssignedEmployee(restaurantEmployee);
         return orderPersistencePort.updateOrder(orderModel);
@@ -92,9 +71,7 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public OrderModel updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken, String loggedUserEmail) {
         OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
-        if(!Objects.equals(orderModel.getRestaurant().getId(), restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail).getRestaurant().getId())){
-            throw new DomainException("The order does not belong to the employee's restaurant");
-        }
+        checkIfOrderBelongsToEmployeeRestaurant(orderModel, restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail));
         orderModel.setStatus(StatusEnum.LISTO);
         UserModel client = userPersistencePort.getUserByIdentityNumber(orderModel.getClientIdentityNumber());
         smsPersistencePort.sendSms(
@@ -104,5 +81,49 @@ public class OrderUseCase implements IOrderServicePort {
                 authToken
         );
         return orderPersistencePort.updateOrder(orderModel);
+    }
+    @Override
+    public OrderModel updateOrderStatusToDelivered(Long existingOrderId, String pin, String authToken, String loggedUserEmail) {
+        OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
+        checkIfOrderBelongsToEmployeeRestaurant(orderModel, restaurantEmployeePersistencePort.getEmployeeByEmail(loggedUserEmail));
+        checkIfOrderIsNotDelivered(orderModel);
+        if(orderModel.getStatus()!=StatusEnum.LISTO){
+            throw new DomainException("Only orders with status 'LISTO' can be delivered");
+        }
+        if(!orderModel.getPin().equals(pin)){
+            throw new DomainException("The pin is not correct");
+        }
+        orderModel.setStatus(StatusEnum.ENTREGADO);
+        return orderPersistencePort.updateOrder(orderModel);
+    }
+
+    private void checkIfDishesBelongsToRestaurant(OrderModel orderModel) {
+        orderModel.getDishQtyList().forEach(orderDishQtyEntity -> {
+            if(!Objects.equals(
+                    dishPersistencePort.getDishById(orderDishQtyEntity.getDish().getId()).getRestaurant().getId(),
+                    orderModel.getRestaurant().getId())
+            ){
+                throw new DomainException("At least one dish does not belong to restaurant");
+            }
+        });
+    }
+    private void checkIfClientHasOrdersInProcess(UserModel client) {
+        orderPersistencePort.getOrderByClientIdentityNumber(client.getIdentityDocument()).forEach(clientOrder -> {
+            if(clientOrder.getStatus().getName().equalsIgnoreCase(StatusEnum.EN_PREPARACION.getName())||
+                    clientOrder.getStatus().getName().equalsIgnoreCase(StatusEnum.PENDIENTE.getName())){
+                throw new DomainException("Client has an order in process");
+            }
+        });
+    }
+    private void checkIfOrderBelongsToEmployeeRestaurant(OrderModel orderModel, RestaurantEmployeeModel restaurantEmployee) {
+        if(!Objects.equals(orderModel.getRestaurant().getId(), restaurantEmployee.getRestaurant().getId())){
+            throw new DomainException("The order does not belong to the employee's restaurant");
+        }
+    }
+
+    private void checkIfOrderIsNotDelivered(OrderModel orderModel) {
+         if(orderModel.getStatus().getName().equalsIgnoreCase(StatusEnum.ENTREGADO.getName())){
+            throw new DomainException("The order is already delivered and the status cannot be changed");
+         }
     }
 }
