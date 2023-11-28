@@ -16,4 +16,6 @@ public interface IOrderServicePort {
     OrderModel updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken, String loggedUserEmail);
 
     OrderModel updateOrderStatusToDelivered(Long existingOrderId, String pin, String loggedUserEmail);
+
+    OrderModel updateOrderStatusToCancelled(Long existingOrderId, String loggedUserEmail);
 }

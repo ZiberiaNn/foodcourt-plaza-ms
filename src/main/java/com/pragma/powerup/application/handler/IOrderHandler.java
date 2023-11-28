@@ -18,4 +18,6 @@ public interface IOrderHandler {
     OrderResponseDto updateOrderStatusToDoneAndSendSms(Long existingOrderId, String authToken);
 
     OrderResponseDto updateOrderStatusToDelivered(Long existingOrderId, PinRequestDto pin);
+
+    OrderResponseDto updateOrderStatusToCancelled(Long existingOrderId);
 }

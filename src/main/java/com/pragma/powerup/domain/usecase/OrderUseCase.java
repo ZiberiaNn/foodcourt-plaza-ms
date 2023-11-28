@@ -90,10 +90,24 @@ public class OrderUseCase implements IOrderServicePort {
         if(orderModel.getStatus()!=StatusEnum.LISTO){
             throw new DomainException("Only orders with status 'LISTO' can be delivered");
         }
-        if(!orderModel.getPin().equals(pin)){
+        else if(!orderModel.getPin().equals(pin)){
             throw new DomainException("The pin is not correct");
         }
         orderModel.setStatus(StatusEnum.ENTREGADO);
+        return orderPersistencePort.updateOrder(orderModel);
+    }
+
+    @Override
+    public OrderModel updateOrderStatusToCancelled(Long existingOrderId, String loggedUserEmail) {
+        OrderModel orderModel = orderPersistencePort.getOrderById(existingOrderId);
+        UserModel client = userPersistencePort.getUserByEmail(loggedUserEmail);
+        if(!Objects.equals(client.getIdentityDocument(), orderModel.getClientIdentityNumber())){
+            throw new DomainException("The order does not belong to the logged client");
+        }
+        else if(orderModel.getStatus()!=StatusEnum.PENDIENTE){
+            throw new DomainException("We're sorry, your order is already cancelled or is being prepared and cannot be cancelled");
+        }
+        orderModel.setStatus(StatusEnum.CANCELADO);
         return orderPersistencePort.updateOrder(orderModel);
     }
 

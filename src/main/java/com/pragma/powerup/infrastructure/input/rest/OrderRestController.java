@@ -83,7 +83,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orderHandler.getOrdersByStatusAndIfEmployeeBelongsToOrder(status, page, size));
     }
 
-    @Operation(summary = "Update an existing order assigned employee and status to 'En preparacion'")
+    @Operation(summary = "Update an existing order assigned employee and status to 'EN_PREPARACION'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order updated",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
@@ -97,7 +97,7 @@ public class OrderRestController {
         return new ResponseEntity<>(orderHandler.updateOrderAssignedEmployeeAndStatusToEnPreparacion(existingOrderId), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update an existing status to 'LISTO' and send SMS to client")
+    @Operation(summary = "Update an existing order status to 'LISTO' and send SMS to client")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order updated",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
@@ -112,7 +112,7 @@ public class OrderRestController {
         return new ResponseEntity<>(orderHandler.updateOrderStatusToDoneAndSendSms(existingOrderId, authToken), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update an existing status to 'ENTREGADO'")
+    @Operation(summary = "Update an existing order status to 'ENTREGADO'")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order updated",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
@@ -125,6 +125,20 @@ public class OrderRestController {
     public ResponseEntity<OrderResponseDto> updateOrderStatusToDelivered(@PathVariable Long existingOrderId,
                                                                          @RequestBody PinRequestDto pinRequestDto) {
         return new ResponseEntity<>(orderHandler.updateOrderStatusToDelivered(existingOrderId, pinRequestDto), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Update an existing order status to 'CANCELADO'")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order updated",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrderResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @PreAuthorize("hasRole(" +
+            "T(com.pragma.powerup.domain.model.auth.enums.RoleEnum).CLIENT.toString()" +
+            ")")
+    @PatchMapping("/status-cancelled/{existingOrderId}")
+    public ResponseEntity<OrderResponseDto> updateOrderStatusToCancelled(@PathVariable Long existingOrderId) {
+        return new ResponseEntity<>(orderHandler.updateOrderStatusToCancelled(existingOrderId), HttpStatus.CREATED);
     }
 
 }
